@@ -390,7 +390,14 @@ namespace Elmah
             if (collection == null || collection.Count == 0)
                 return null;
 
-            return new NameValueCollection(collection);
+            try
+            {
+                return new NameValueCollection(collection);
+            }
+            catch (HttpRequestValidationException)
+            {
+                return collection.DeepClone();
+            }
         }
 
         private static NameValueCollection CopyCollection(HttpCookieCollection cookies)
